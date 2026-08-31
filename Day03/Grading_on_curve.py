@@ -1,9 +1,9 @@
 def grade():
     
-    score=int(input("Enter Scores : "))
+    scores = [int(x) for x in input("Enter Scores: ").split()]
 
     
-    x=[score+10 for score in score if score<50 or score+5 for score in score if score>50 ]
+    x=[min(100,score+10 if score<50 else score+5 ) for score in scores ]
     
     print(x)
 grade()
