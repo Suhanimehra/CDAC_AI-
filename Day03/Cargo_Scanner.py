@@ -1,6 +1,6 @@
-def cargo():
+def cargo(wagon):
     
-    wagon=["coal", "iron", "gold", "coal", "timber", "coal"]
+    
     
     resource=input("enter the resource you want to count: ")
     
@@ -14,6 +14,6 @@ def cargo():
         print(f"{resource} is not in the wagon.")
     
     
-    
-cargo()
+wagon=["coal", "iron", "gold", "coal", "timber", "coal"]  
+cargo(wagon)
 
