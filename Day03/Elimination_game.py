@@ -9,7 +9,7 @@ def game():
     pop_idx=0
 
     for _ in range(1, soldiers+1):
-        pop_idx = (pop_idx +intervals -1) % len(list_soldiers)
+        pop_idx=  (pop_idx +intervals -1) % len(list_soldiers)
 
         updated=list_soldiers.pop(pop_idx) 
 
