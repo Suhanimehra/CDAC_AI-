@@ -32,12 +32,14 @@ def manage_bookstore_inventory(inventory, action, book_title, quantity=0):
             if inventory[book_title]==0: del inventory[book_title]   
 
             return inventory
+    if action.lower()=="lookup":
+        return inventory.get(book_title, 0)
 
 m=manage_bookstore_inventory(inventory, "add", "Python Basics", 3)
-# y= manage_bookstore_inventory(inventory, "sell", "Data Science 101", 1)
-# z= manage_bookstore_inventory(inventory, "sell", "Learning AI", 10)
+y= manage_bookstore_inventory(inventory, "sell", "Data Science 101", 1)
+z= manage_bookstore_inventory(inventory, "lookup", "Learning AI", 10)
 # d= manage_bookstore_inventory(inventory, "sell", "Learning AI", 5)
 # print(d)
-# print(z)
+print(z)
 print(m)
-# print(y)
+print(y)
