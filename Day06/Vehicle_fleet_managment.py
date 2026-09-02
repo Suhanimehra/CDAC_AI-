@@ -9,7 +9,7 @@ class Vehicle:
         return self.fuel_capacity* fuel_efficiency
 
     def get_description(self):
-        return f"Vehicle: {self.make} {self.model}"
+        return  f"Truck: {self.make} {self.model} carrying {self.cargo_load} tons"
 
 class DeliveryTruck(Vehicle):
 
@@ -19,7 +19,17 @@ class DeliveryTruck(Vehicle):
         self.cargo_load=cargo_load
 
     def calculate_range(self, fuel_efficiency):
-        return super().calculate_range(fuel_efficiency)
+        # base_range=super().calculate_range(fuel_efficiency)
+        # adjusted_range=base_range *(1.0 - 0.1 * self.cargo_load)
+        
+        # return adjusted_range
+        return super().calculate_range(fuel_efficiency) * (1.0 - 0.1 * self.cargo_load)
 
     def get_description(self):
         return super().get_description()
+        
+        
+truck = DeliveryTruck("Volvo", "FH16", 300.0, 2.0)
+
+print(truck.calculate_range(5.0))
+print(truck.get_description())
