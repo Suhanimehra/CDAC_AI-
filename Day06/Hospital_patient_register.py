@@ -3,7 +3,7 @@ import re
 class Patient:
     _patient_counter=0
     
-    
+
     @staticmethod
     def validate_dob_format(dob_str):
         pattern=r"^\d{4}-\d{2}-\d{2}$"
