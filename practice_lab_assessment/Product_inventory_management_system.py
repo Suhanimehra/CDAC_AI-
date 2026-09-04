@@ -1,3 +1,5 @@
+import re
+
 #-------------------sample data---------------------
 products = [
 {"id": 1, "name": "Laptop", "category": "Electronics", "price": 55000, "quantity": 10},
@@ -27,7 +29,7 @@ def add_products():
             print("Invalid Input Name cannot be empty.")
             return
         
-        price=int(input("Enter Price: "))
+        price=float(input("Enter Price: "))
         if price<=0:
             print("Price cannot be negative/zero.")
             return
@@ -64,7 +66,7 @@ def many_product(products_list):
     
     for p in products_list:
         pid,name,category,price,quantity=p.values()
-        print(f"{pid:^5}{name:<20}{category:<20}{price:>10}{quantity:>5}")
+        print(f"{pid:^5}{name:<20}{category:<20}{price:>10.2f}{quantity:>5}")
        
     
     print('-'*60)
@@ -79,26 +81,137 @@ def view_products():
     else:
         many_product(products)       
 #--------------------------------------------------------------------------------------------------
+def search_produts():
+    try:
+        search_choice=int(input("Enter 1 for searching by product ID: \nEnter 2 for searching by name: "))
+        if search_choice==1:
+            pid=int(input("Enter the product id you want to search: "))
+            search_product_id(pid)
+            
+        elif search_choice==2:
+            search_name()
+
+        else:
+            ("Print Enter a valid choice.")
+    except:
+        print("Try with a valid integer.")
+
+#--------------------------------------------------------------------------------------------------
+
+def search_product_id(pid):
+
+    result=[p for p in products if p['id']==pid]
+    if not result:
+        print(f"No product found for id {pid}")
+        return None
+
+    one_product(result[0])
+    return result[0]
+
+#--------------------------------------------------------------------------------------------------
+def search_name():
+
+    name = input("Enter the product name you want to  search")
+
+    result=[p for p in products if p['name']==name]
+    if not result:
+        print(f"No product found for name {name}")
+        return None
+
+    if len(result)==1:
+        one_product(result[0])
+
+    else:
+        many_product(result)
+    
+#--------------------------------------------------------------------------------------------------
+def update_product():
+    try:
+        update_pid=int(input("Enter the Product id you want to update:" ))
+
+        result=[p for p in products if p['id']==update_pid]
+
+        if not result:
+            print(f"No product found for name {update_pid}")
+            return None
+
+        
+        else:
+
+            name=input("Enter the update name: ")
+            if name=='':
+                print("Invalid Input Name cannot be empty.")
+                return
+            
+            category=input("Enter the update category: ")
+            if category=='':
+                print("Invalid Input Name cannot be empty.")
+                return
+            price=float(input("Enter the update price: "))
+            if price<=0:
+                print("Price cannot be negative/zero.")
+                return
+            quantity=int(input("Enter the update quantity: "))
+            if quantity <0:
+                print("Quantity cannot be negative/zero.")
+                return
+
+            result[0]['name']=name
+            result[0]['category']=category
+            result[0]['price']=price
+            result[0]['quantity']=quantity
+
+            one_product(result[0])
+    except:
+        print("Enter a valid integer")
+#--------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+
+def delete_product():
+    try:
+        pid_1=int(input("Enter the product id of product you want to delete: "))
+
+
+        product=search_product_id(pid_1)
+
+        if product is None:
+            return
+
+        else:
+            delete_choice=input("Are you sure [y/n]: ")
+
+            if delete_choice.lower()=='y':
+
+                products.remove(product)
+                print("Prodct Deleted Successfully")
+            else:
+                print("Product was not deleted.")
+
+    except:
+        print("Enter a Valid integer ")
+
+
+
 #--------------------------------------------------------------------------------------------------
 def main():
     while True:
 
         menu()
-        choice= int(input("Enter Your Choice: "))
+        menu_choice= int(input("Enter Your Choice: "))
         
         print('-'*50)
 
-        match choice:
+        match menu_choice:
             case 1:
                 add_products()
             case 2:
                 view_products()
             case 3:
-                pass
+                search_produts()
             case 4:
-                pass
+                update_product()
             case 5:
-                pass
+                delete_product()
             case 6:
                 break
             case _:
