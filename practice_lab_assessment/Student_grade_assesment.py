@@ -3,7 +3,6 @@ import json
 students = [
 {"id": 1, "name": "Aarav Sharma", "course": "Python Core", "marks": 88.5, "grade": "A"},
 {"id": 2, "name": "Diya Patel", "course": "Data Science", "marks": 74.0, "grade": "B"},
-{"id": 3, "name": "Diya Patel", "course": "Data Science", "marks": 74.0, "grade": "B"}
 ]
 
 id_counter=len(students)
@@ -45,20 +44,20 @@ def enroll_student():
     global id_counter
     try:
         name=input("Enter your name: ")
-        if name.strip()=='':
+        if name.strip().lower()=='':
             print("Name cannot be empty")
             return
         course=input("Enter enrolled course: ")
-        if course.strip()=='':
+        if course.strip().lower()=='':
             print("Course cannot be empty")
+            return
         marks=float(input("Enter the marks obtained: "))
-        if not 0<marks<100:
+        if not 0<=marks<=100:
             print("Marks cannot be less than 0 or more than 100.")
             return
         
         students.append(dict(id=id_counter+1,name=name,course=course,marks=marks,grade=grade_generator(marks)))
         id_counter+=1
-        print(students)
     except:
         print("Enter valid integer value.")
 
@@ -88,7 +87,7 @@ def print_one_record(s): #here s will represent students[0]
 def print_many_record(students):
 
     print("------Student Details-------")
-    print(f'{'ID':<5}{'Name':<20}{'Course':<20}{'Marks':>10}{'Grade':>10}')
+    print(f"{'ID':<5}{'Name':<20}{'Course':<20}{'Marks':>10}{'Grade':>10}")
 
     print('-'*65)
 
@@ -112,7 +111,7 @@ def search_records():
         elif search_choice==2:
             search_by_name()
         elif search_choice==3:
-            pass
+            search_by_course_name()
         else:
             print("Enter a Valid Input Choice.")
     except:
@@ -137,11 +136,11 @@ def search_by_student_id():
 
 def search_by_name():
     try:
-        student_name=input("Enter the Student ID you want to search.")
+        student_name=input("Enter the Student Name you want to search.")
         # res = [s for s in students if s["name"].strip().lower() == student_name.lower()]
         res = []
         for s in students:
-            if s["name"] == student_name:
+            if s["name"].strip().lower()== student_name:
                 res.append(dict(s))
         
         if len(res) == 0:
@@ -155,11 +154,11 @@ def search_by_name():
 
 def search_by_course_name():
     try:
-        course_name=input("Enter the Student ID you want to search.")
+        course_name=input("Enter the Course Name you want to search.")
         # res = [s for s in students if s["name"].strip().lower() == student_name.lower()]
         res = []
         for s in students:
-            if s["course"] == course_name:
+            if s["course"].strip().lower() == course_name:
                 res.append(dict(s))
         
         if len(res) == 0:
@@ -171,6 +170,67 @@ def search_by_course_name():
     except:
         print("Enter a Valid Course Name")
 
+def update_record():
+    
+    try:
+        update_choice=int(input("Enter the student ID to update."))
+        
+        result=[s for s in students if s['id']==update_choice]
+        
+        if not result:
+            print(f"No Student Found For {update_choice}")
+        
+        else:
+            name=input("Enter the update name: ")
+            if name.strip().lower()=='':
+                print("Invalid Input Name cannot be empty.")
+                return
+            
+            course=input("Enter enrolled course: ")
+            if course.strip().lower()=='':
+                print("Course cannot be empty")
+                return
+            
+            marks=float(input("Enter the marks obtained: "))
+            if not 0<marks<100:
+                print("Marks cannot be less than 0 or more than 100.")
+                return
+            grade=grade_generator(marks) 
+            
+            result[0]['name']=name
+            result[0]['course']=course
+            result[0]['marks']=marks
+            result[0]['grade']=grade
+
+            print_one_record(result[0])
+
+    except:
+        print("Enter a Valid Number")
+        
+def delete_record():
+    
+    try:
+    
+        delete_choice=int(input("Enter the Student ID you want to delete: "))
+        
+        result=[s for s in students if s['id']==delete_choice]
+                
+        if not result:
+            print(f"No Student Found For {delete_choice}")
+            
+        else:
+            choice=input("Are You Sure You Want To Delete[y/n]: ")
+        
+            if choice.lower()=='y':
+                students.remove(result[0])
+                print("record deleted successfully")
+                print_many_record(students)
+            else:
+                print("No Record deleted")
+           
+    except:
+        print("Enter Right Value")   
+    
 
 def save_to_json():
     global filename
@@ -212,9 +272,9 @@ def main():
             case 3:
                 search_records()
             case 4:
-                pass
+                update_record()
             case 5:
-                pass
+                delete_record()
             case 6:
                 save_to_json()
             case 7:
