@@ -1,0 +1,5 @@
+1|Python Programming|John Zelle|Technical|650.0|15
+2|Clean Code|Robert Martin|Technical|950.0|8
+3|The Great Gatsby|F. Scott Fitzgerald|Fiction|350.0|20
+4|Sapiens|Yuval Noah Harari|History|550.0|12
+5|Cosmos|Carl Sagan|Science|480.0|6
