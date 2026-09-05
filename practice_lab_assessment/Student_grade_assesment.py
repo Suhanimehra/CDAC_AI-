@@ -2,7 +2,7 @@ import json
 
 students = [
 {"id": 1, "name": "Aarav Sharma", "course": "Python Core", "marks": 88.5, "grade": "A"},
-{"id": 2, "name": "Diya Patel", "course": "Data Science", "marks": 74.0, "grade": "B"}
+# {"id": 2, "name": "Diya Patel", "course": "Data Science", "marks": 74.0, "grade": "B"}
 ]
 
 id_counter=3
@@ -22,6 +22,7 @@ def menu():
     '''
     print(menu_text)
     print('*'*50)
+    
 def grade_generator(marks):
     if marks>=85:
         grade='A'
@@ -61,6 +62,31 @@ def enroll_student():
     except:
         print("Enter valid integer value.")
 
+def cohort_directory():
+    
+    if len(students)==0:
+        print("No Record in Directory")
+    
+    elif len(students)==1:
+        print_one_student_record()
+        
+    else:
+        pass
+
+def print_one_student_record():
+    id,name,course,marks,grade=students.values()
+    
+    print("-----Student Record----------")
+    print(f'ID:{id}')
+    print(f'name:{name}')
+    print(f'course:{course}')
+    print(f'marks:{marks}')
+    print(f'grade:{grade}')
+
+def print_many_student_record():
+    pass
+        
+
 def save_to_json():
     global filename
     try:
@@ -92,7 +118,7 @@ def main():
             case 1:
                 enroll_student()
             case 2:
-                pass
+                cohort_directory()
             case 3:
                 pass
             case 4:
