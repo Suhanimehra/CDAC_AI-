@@ -1,0 +1,491 @@
+filename = "books.txt"
+
+books = [
+    {
+        "id": 1,
+        "title": "Python Programming",
+        "author": "John Zelle",
+        "genre": "Technical",
+        "price": 650.00,
+        "copies": 15
+    },
+    {
+        "id": 2,
+        "title": "Clean Code",
+        "author": "Robert Martin",
+        "genre": "Technical",
+        "price": 950.00,
+        "copies": 8
+    },
+    {
+        "id": 3,
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "genre": "Fiction",
+        "price": 350.00,
+        "copies": 20
+    },
+    {
+        "id": 4,
+        "title": "Sapiens",
+        "author": "Yuval Noah Harari",
+        "genre": "History",
+        "price": 550.00,
+        "copies": 12
+    },
+    {
+        "id": 5,
+        "title": "Cosmos",
+        "author": "Carl Sagan",
+        "genre": "Science",
+        "price": 480.00,
+        "copies": 6
+    }
+]
+
+
+# --------------------------------------------------
+# MENU
+# --------------------------------------------------
+
+def menu():
+    print("=" * 80)
+    print("----------- Library Management System -----------")
+    print("""
+    1. Add Book
+    2. View Catalog
+    3. Search Books
+    4. Update Details
+    5. Delete Book
+    6. Save to File
+    7. Load from File
+    8. Exit
+    """)
+    print("=" * 80)
+
+
+# --------------------------------------------------
+# ADD BOOK
+# --------------------------------------------------
+
+def add_book_entry(catalog, next_id):
+    title = input("Enter the Title: ").strip()
+
+    if title == "":
+        print("Title cannot be empty.")
+        return next_id
+
+    author = input("Enter Author: ").strip()
+
+    if author == "":
+        print("Author cannot be empty.")
+        return next_id
+
+    genre = input("Enter Genre: ").strip()
+
+    if genre == "":
+        print("Genre cannot be empty.")
+        return next_id
+
+    try:
+        price = float(input("Enter Price of Book: "))
+
+        if price <= 0:
+            print("Price must be greater than 0.")
+            return next_id
+
+        copies = int(input("Enter Copies of Book: "))
+
+        if copies < 0:
+            print("Copies cannot be negative.")
+            return next_id
+
+    except ValueError:
+        print("Please enter valid numerical values.")
+        return next_id
+
+    new_book = {
+        "id": next_id,
+        "title": title,
+        "author": author,
+        "genre": genre,
+        "price": price,
+        "copies": copies
+    }
+
+    catalog.append(new_book)
+
+    print("Book Added Successfully!")
+
+    return next_id + 1
+
+
+# --------------------------------------------------
+# DISPLAY CATALOG
+# --------------------------------------------------
+
+def render_catalog(catalog):
+
+    if len(catalog) == 0:
+        print("No Books in Record.")
+        return
+
+    # If there is only one book, display a card
+    if len(catalog) == 1:
+        book = catalog[0]
+
+        print("-" * 60)
+        print("------------- Book Details -------------")
+        print(f"ID       : {book['id']}")
+        print(f"Title    : {book['title']}")
+        print(f"Author   : {book['author']}")
+        print(f"Genre    : {book['genre']}")
+        print(f"Price    : {book['price']:.2f}")
+        print(f"Copies   : {book['copies']}")
+        print("-" * 60)
+
+    else:
+        print("-" * 90)
+        print(
+            f"{'ID':<5}"
+            f"{'Title':<25}"
+            f"{'Author':<25}"
+            f"{'Genre':<15}"
+            f"{'Price':>10}"
+            f"{'Copies':>10}"
+        )
+
+        print("-" * 90)
+
+        for book in catalog:
+            print(
+                f"{book['id']:<5}"
+                f"{book['title']:<25}"
+                f"{book['author']:<25}"
+                f"{book['genre']:<15}"
+                f"{book['price']:>10.2f}"
+                f"{book['copies']:>10}"
+            )
+
+        print("-" * 90)
+
+
+# --------------------------------------------------
+# SEARCH BOOKS
+# --------------------------------------------------
+
+def query_books(catalog, search_term):
+
+    search_term = search_term.strip()
+
+    # Search by ID if the input is numeric
+    if search_term.isdigit():
+
+        book_id = int(search_term)
+
+        return [
+            book
+            for book in catalog
+            if book["id"] == book_id
+        ]
+
+    # Otherwise search title OR author
+    search_term = search_term.lower()
+
+    return [
+        book
+        for book in catalog
+        if search_term in book["title"].lower()
+        or search_term in book["author"].lower()
+    ]
+
+
+# --------------------------------------------------
+# UPDATE BOOK
+# --------------------------------------------------
+
+def modify_book_details(catalog, book_id):
+
+    for book in catalog:
+
+        if book["id"] == book_id:
+
+            try:
+                price = float(input("Enter New Price: "))
+
+                if price <= 0:
+                    print("Price must be greater than 0.")
+                    return False
+
+                copies = int(input("Enter New Copies: "))
+
+                if copies < 0:
+                    print("Copies cannot be negative.")
+                    return False
+
+            except ValueError:
+                print("Please enter valid numerical values.")
+                return False
+
+            book["price"] = price
+            book["copies"] = copies
+
+            print("Book Updated Successfully!")
+
+            return True
+
+    print("No Book Found with that ID.")
+
+    return False
+
+
+# --------------------------------------------------
+# DELETE BOOK
+# --------------------------------------------------
+
+def delete_book(catalog, book_id):
+
+    for book in catalog:
+
+        if book["id"] == book_id:
+
+            choice = input(
+                f"Are you sure you want to delete "
+                f"'{book['title']}'? (y/n): "
+            ).strip().lower()
+
+            if choice == "y":
+                catalog.remove(book)
+                print("Book Deleted Successfully.")
+                return True
+
+            elif choice == "n":
+                print("No Book Was Deleted.")
+                return False
+
+            else:
+                print("Please enter y or n.")
+                return False
+
+    print("No Book Found with that ID.")
+
+    return False
+
+
+# --------------------------------------------------
+# SAVE TO FILE
+# --------------------------------------------------
+
+def sync_catalog_to_file(filepath, catalog):
+
+    with open(filepath, "w") as file:
+
+        for book in catalog:
+
+            line = (
+                f"{book['id']}|"
+                f"{book['title']}|"
+                f"{book['author']}|"
+                f"{book['genre']}|"
+                f"{book['price']:.2f}|"
+                f"{book['copies']}\n"
+            )
+
+            file.write(line)
+
+    print("Catalog Saved Successfully.")
+
+
+# --------------------------------------------------
+# LOAD FROM FILE
+# --------------------------------------------------
+
+def load_catalog_from_file(filepath):
+
+    catalog = []
+
+    try:
+
+        with open(filepath, "r") as file:
+
+            for line in file:
+
+                line = line.strip()
+
+                if line == "":
+                    continue
+
+                parts = line.split("|")
+
+                book_id = int(parts[0])
+                title = parts[1]
+                author = parts[2]
+                genre = parts[3]
+                price = float(parts[4])
+                copies = int(parts[5])
+
+                book = {
+                    "id": book_id,
+                    "title": title,
+                    "author": author,
+                    "genre": genre,
+                    "price": price,
+                    "copies": copies
+                }
+
+                catalog.append(book)
+
+        print("Catalog Loaded Successfully.")
+
+    except FileNotFoundError:
+        print("books.txt was not found.")
+
+    except ValueError:
+        print("Invalid data found in the file.")
+
+    return catalog
+
+
+# --------------------------------------------------
+# MAIN PROGRAM
+# --------------------------------------------------
+
+def main():
+
+    catalog = books.copy()
+
+    # Find the next available ID
+    if len(catalog) > 0:
+        next_id = max(book["id"] for book in catalog) + 1
+    else:
+        next_id = 1
+
+    while True:
+
+        menu()
+
+        try:
+            menu_choice = int(input("Enter Your Choice: "))
+
+        except ValueError:
+            print("Please enter a number from 1 to 8.")
+            continue
+
+        # ------------------------------------------
+        # 1. ADD BOOK
+        # ------------------------------------------
+
+        if menu_choice == 1:
+
+            next_id = add_book_entry(catalog, next_id)
+
+        # ------------------------------------------
+        # 2. VIEW CATALOG
+        # ------------------------------------------
+
+        elif menu_choice == 2:
+
+            render_catalog(catalog)
+
+        # ------------------------------------------
+        # 3. SEARCH BOOKS
+        # ------------------------------------------
+
+        elif menu_choice == 3:
+
+            search_term = input(
+                "Enter Book ID, Title, or Author to search: "
+            )
+
+            results = query_books(catalog, search_term)
+
+            if len(results) == 0:
+                print("No Books Found.")
+
+            else:
+                print(f"{len(results)} Book(s) Found.")
+                render_catalog(results)
+
+        # ------------------------------------------
+        # 4. UPDATE DETAILS
+        # ------------------------------------------
+
+        elif menu_choice == 4:
+
+            try:
+                book_id = int(
+                    input("Enter the Book ID to Update: ")
+                )
+
+                modify_book_details(catalog, book_id)
+
+            except ValueError:
+                print("Please enter a valid Book ID.")
+
+        # ------------------------------------------
+        # 5. DELETE BOOK
+        # ------------------------------------------
+
+        elif menu_choice == 5:
+
+            try:
+                book_id = int(
+                    input("Enter the Book ID to Delete: ")
+                )
+
+                delete_book(catalog, book_id)
+
+            except ValueError:
+                print("Please enter a valid Book ID.")
+
+        # ------------------------------------------
+        # 6. SAVE TO FILE
+        # ------------------------------------------
+
+        elif menu_choice == 6:
+
+            sync_catalog_to_file(filename, catalog)
+
+        # ------------------------------------------
+        # 7. LOAD FROM FILE
+        # ------------------------------------------
+
+        elif menu_choice == 7:
+
+            loaded_catalog = load_catalog_from_file(filename)
+
+            # Only replace current catalog if loading succeeded
+            if loaded_catalog:
+                catalog = loaded_catalog
+
+                # Recalculate next ID
+                next_id = max(
+                    book["id"] for book in catalog
+                ) + 1
+
+        # ------------------------------------------
+        # 8. EXIT
+        # ------------------------------------------
+
+        elif menu_choice == 8:
+
+            print("Thank you for using the Library Management System.")
+            break
+
+        # ------------------------------------------
+        # INVALID CHOICE
+        # ------------------------------------------
+
+        else:
+
+            print("Enter a valid choice from 1 to 8.")
+
+        print("=" * 80)
+
+
+# --------------------------------------------------
+# PROGRAM START
+# --------------------------------------------------
+
+if __name__ == "__main__":
+    main()

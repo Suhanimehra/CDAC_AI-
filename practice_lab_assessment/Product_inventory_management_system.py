@@ -135,7 +135,6 @@ def update_product():
             print(f"No product found for name {update_pid}")
             return None
 
-        
         else:
 
             name=input("Enter the update name: ")
