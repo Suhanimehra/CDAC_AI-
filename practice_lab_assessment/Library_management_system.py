@@ -1,25 +1,32 @@
 filename='books.txt'
-books=[
-    {
-        "id": 1,
-        "title": "Python Programming",
-        "author": "John Zelle",
-        "genre":"Technical",
-        "price": 650,
-        "copy":15
-    },
-    {
-        "id": 2,
-        "title": "Clean Code",
-        "author": "Robert Martin",
-        "genre":"Technical",
-        "price": 950,
-        "copy":8
-        }
-]
+# books=[
+#     {
+#         "id": 1,
+#         "title": "Python Programming",
+#         "author": "John Zelle",
+#         "genre":"Technical",
+#         "price": 650,
+#         "copy":15
+#     },
+#     {
+#         "id": 2,
+#         "title": "Clean Code",
+#         "author": "Robert Martin",
+#         "genre":"Technical",
+#         "price": 950,
+#         "copy":8
+#         }
+# ]
+
+books =[]
 id_counter=len(books)
 
 def main():
+    global filename
+    global books
+    global id_counter
+    next_id=id_counter+1
+    
     while True:
         
         menu()
@@ -27,19 +34,21 @@ def main():
         
         match menu_choice:
             case 1:
-                add_book()
+                add_book(books,next_id)
             case 2:
-                view_book()
+                view_book(books)
             case 3:
-                search_books()
+                search_choice=int(input("Enter 1 to search by BookID.\n Enter 2 to search by Title.\n Enter 3 to search by Author."))
+                search_books(books, search_choice)
             case 4:
-                update_book()
+                update_id=int(input("Enter The Book ID to Update: "))
+                update_book(books,update_id)
             case 5:
                 delete_book()
             case 6:
-                save_to_file()
+                save_to_file(filename,books)
             case 7:
-                load_to_file()
+                load_to_file(filename,books)
             case 8:
                 break
             case _:
@@ -65,8 +74,8 @@ def menu():
     print('='*60)
     
     
-def add_book():
-    global id_counter
+def add_book(books,next_id):
+
     try:
         title=input("Enter the Title: ")
         if title.strip()=='':
@@ -89,15 +98,15 @@ def add_book():
             print("Copy Cannot be Negative.")
             return
             
-        books.append(dict(id=id_counter+1,title=title,author=author,genre=genre,price=price,copy=copies))
-        id_counter+=1
+        books.append(dict(id=next_id,title=title,author=author,genre=genre,price=price,copy=copies))
+
         
         print("Book Added Successfully!")
     except ValueError:
         print("Enter Valid Input.")
 
 
-def view_book():
+def view_book(books):
     
     if len(books)==0:
         print("No Books in Record.")
@@ -135,22 +144,20 @@ def print_many_record(books):
     print('-'*80)
 
 
-def search_books():
+def search_books(books,search_choice):
     try:
-        search_choice=int(input("Enter 1 to search by BookID.\n Enter 2 to search by Title.\n Enter 3 to search by Author."))
-
         if search_choice==1:
-            search_by_id()
+            search_by_id(books)
         elif search_choice==2:
-            search_by_title()
+            search_by_title(books)
         elif search_choice==3:
-            search_by_author()
+            search_by_author(books)
         else:
             print("Enter A Valid Integer")
     except:
         print("Retry Again")
         
-def search_by_id():
+def search_by_id(books):
     try:
         search_id_choice=int(input("Enter The Book ID: "))
         
@@ -165,7 +172,7 @@ def search_by_id():
     except ValueError:
         print("Enter A Valid ID")
 
-def search_by_title():
+def search_by_title(books):
     try:
         search_title_choice=input("Enter The Book Title: ").strip()
         # here we have to find with substring concept
@@ -180,7 +187,7 @@ def search_by_title():
     except:
         print("Enter A Valid Title")
 
-def search_by_author():
+def search_by_author(books):
     try:
         search_author_choice=input("Enter The Book Author: ").strip()
         
@@ -195,9 +202,8 @@ def search_by_author():
     except:
         print("Enter A Valid Author")
 
-def update_book():
+def update_book(books,update_id):
     try:
-        update_id=int(input("Enter The Book ID to Update: "))
         
         res=[b for b in books if b['id']==update_id]
         
@@ -246,15 +252,45 @@ def delete_book():
     except ValueError :
         print("Enter a Valid ID to delete.")
         
-def save_to_file():
-    global filename
+def save_to_file(filename,books):
     
     with open(filename,mode='w') as file:
-        pass
+
+        for b in books:
+
+            line=(
+                f"{b['id']}|"
+                f"{b['title']}|"
+                f"{b['author']}|"
+                f"{b['genre']}|"
+                f"{b['price']}|"
+                f"{b['copy']}\n"
+            )
+
+            file.write(line)
+    print("File Saved Successfully!")
         
         
 
-def load_to_file():
-    pass
+def load_to_file(filename,books):
+
+
+    with open(filename,mode='r') as file:
+
+        for line in file:
+            load_list=line.split('|')
+
+            book={
+                'id':int(load_list[0]),
+                'title':load_list[1],
+                'author':load_list[2],
+                'genre':load_list[3],
+                'price':float(load_list[4]),
+                'copy':int(load_list[5])
+            }
+
+            books.append(book)
+        print("File Loaded Successfully! ")
+
 if __name__=='__main__':
     main()
