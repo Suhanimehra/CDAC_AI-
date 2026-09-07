@@ -8,6 +8,7 @@ students = [
 
 id_counter=len(students)
 filename='students_record.json'
+
 def menu():
     print('*'*100)
     menu_text=''' 
@@ -23,6 +24,7 @@ def menu():
     '''
     print(menu_text)
     print('*'*100)
+
 def grade_generator(marks):
     if marks>=85:
         grade='A'
@@ -39,7 +41,6 @@ def grade_generator(marks):
     else:
         grade='F(Fail)'
         return grade
-
 
 def enroll_student():
     global id_counter

@@ -1,47 +1,5 @@
-
 filename = 'books.txt'
-# books = [
-#     {
-#         "id": 1,
-#         "title": "Python Programming",
-#         "author": "John Zelle",
-#         "genre": "Technical",
-#         "price": 650.00,
-#         "copies": 15
-#     },
-#     {
-#         "id": 2,
-#         "title": "Clean Code",
-#         "author": "Robert Martin",
-#         "genre": "Technical",
-#         "price": 950.00,
-#         "copies": 8
-#     },
-#     {
-#         "id": 3,
-#         "title": "The Great Gatsby",
-#         "author": "F. Scott Fitzgerald",
-#         "genre": "Fiction",
-#         "price": 350.00,
-#         "copies": 20
-#     },
-#     {
-#         "id": 4,
-#         "title": "Sapiens",
-#         "author": "Yuval Noah Harari",
-#         "genre": "History",
-#         "price": 550.00,
-#         "copies": 12
-#     },
-#     {
-#         "id": 5,
-#         "title": "Cosmos",
-#         "author": "Carl Sagan",
-#         "genre": "Science",
-#         "price": 480.00,
-#         "copies": 6
-#     }
-# ]
+
 books = []
 
 def welcome():
@@ -119,7 +77,12 @@ def render_catalog(books):
         print_all_books(books)
 
 def print_one_book(b):
-    pass
+    id,title,author,genre,price,copies = b.values()
+    print('_'*85)
+    print(f'{'ID':<5}{'Title':<20}{'Author':<25}{'Genre':<10}{'Price':>10}{'Copies':>15}')
+    print(f'{id:<5}{title:<20}{author:<25}{genre:<10}{price:>10}{copies:>15}')
+    print('_'*85)
+
 def print_all_books(book_dict):
     print('_'*85)
     print(f'{'ID':<5}{'Title':<20}{'Author':<25}{'Genre':<10}{'Price':>10}{'Copies':>15}')
@@ -127,7 +90,6 @@ def print_all_books(book_dict):
         id,title,author,genre,price,copies = b.values()
         print(f'{id:<5}{title:<20}{author:<25}{genre:<10}{price:>10}{copies:>15}')
     print('_'*85)
-
 
 def add_book_entry(books, next_id):
     title = input("Enter the title for book : ")
@@ -145,6 +107,8 @@ def add_book_entry(books, next_id):
     books.append(dict(id=next_id,title=title,author=author,genre=genre,price=price,copies=copies))
     print("Book Added Successfully ")
 
+def search_catalog():
+    pass
 
 def main():
     global filename
@@ -168,7 +132,6 @@ def main():
                 break
             case _:
                 print("Invalid Input")
-
 
 if __name__ == '__main__':
     main()
