@@ -88,7 +88,7 @@ def add_book(books,next_id):
             return
         genre=input("Enter Genre: ")
         if genre.strip()=='':
-            print("Genre Cannot be an Empty String.")
+            print("Genre Cannot be an Empty String. ")
             return
         price=float(input("Enter Price of Book: "))
         if price <=0 :
