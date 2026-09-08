@@ -22,6 +22,7 @@ books =[]
 id_counter=len(books)
 
 def main():
+    
     global filename
     global books
     global id_counter
