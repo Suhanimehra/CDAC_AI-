@@ -39,8 +39,11 @@ def main():
             case 2:
                 view_book(books)
             case 3:
-                search_choice=int(input("Enter 1 to search by BookID.\n Enter 2 to search by Title.\n Enter 3 to search by Author."))
-                search_books(books, search_choice)
+                try:
+                    search_choice=int(input("Enter 1 to search by BookID.\n Enter 2 to search by Title.\n Enter 3 to search by Author."))
+                    search_books(books, search_choice)
+                except:
+                    print("Invalid Input Choice!")
             case 4:
                 update_id=int(input("Enter The Book ID to Update: "))
                 update_book(books,update_id)
